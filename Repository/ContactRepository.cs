@@ -30,4 +30,40 @@ public class ContactRepository
         }
 
     }
+
+    public static void AddContact(Contact contact)
+    {
+        var maxId = _contacts.Max(x => x.ContactId);
+        contact.ContactId = maxId + 1;
+        _contacts.Add(contact);
+    }
+
+    public static void DeleteContact(int contactId)
+    {
+        var contactToDelete = _contacts.FirstOrDefault(x => x.ContactId == contactId);
+        if (contactToDelete != null)
+        {
+            _contacts.Remove(contactToDelete);
+        }
+    }
+
+    public static List<Contact> SearchContracts(string filterText)
+    {
+        var filterContacts = _contacts.Where(x => !string.IsNullOrWhiteSpace(x.Name) && x.Name.StartsWith(filterText, StringComparison.OrdinalIgnoreCase))?.ToList();
+
+        if (filterContacts == null || filterContacts.Count <= 0)
+            filterContacts = _contacts.Where(x => !string.IsNullOrWhiteSpace(x.Email) && x.Email.StartsWith(filterText, StringComparison.OrdinalIgnoreCase))?.ToList();
+        else
+            return filterContacts;
+        if (filterContacts == null || filterContacts.Count <= 0)
+            filterContacts = _contacts.Where(e => !string.IsNullOrWhiteSpace(e.Phone) && e.Phone.StartsWith(filterText, StringComparison.OrdinalIgnoreCase))?.ToList();
+        else
+            return filterContacts;
+        if (filterContacts == null || filterContacts.Count <= 0)
+            filterContacts = _contacts.Where(e => !string.IsNullOrWhiteSpace(e.Address) && e.Address.StartsWith(filterText, StringComparison.OrdinalIgnoreCase))?.ToList();
+        else
+            return filterContacts;
+
+        return filterContacts;
+    }
 }
