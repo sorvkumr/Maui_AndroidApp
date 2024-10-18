@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Behaviors;
 using Maui_1_Application.Repository;
 using Contact = Maui_1_Application.Models.Contact;
 
@@ -19,33 +20,31 @@ public partial class EditContactPage : ContentPage
             contact = ContactRepository.GetContactById(int.Parse(value));
             if (contact != null)
             {
-                entryName.Text = contact.Name;
-                entryPhone.Text = contact.Phone;
-                entryEmail.Text = contact.Email;
-                entryAddress.Text = contact.Address;
+                contactCtrl.Name = contact.Name;
+                contactCtrl.Phone = contact.Phone;
+                contactCtrl.Email= contact.Email;
+                contactCtrl.Address= contact.Address;
             }
         }
     }
 
     private void btnUpdate_Clicked(object sender, EventArgs e)
     {
-        if (nameValidator.IsValid)
-        {
-            contact.Name = entryName.Text;
-            contact.Phone = entryPhone.Text;
-            contact.Email = entryEmail.Text;
-            contact.Address = entryAddress.Text;
-            ContactRepository.UpdateContact(contact.ContactId, contact);
-            Shell.Current.GoToAsync("..");
-        }
-        else
-        {
-            DisplayAlert("Error", "Name is required.", "OK");
-        }
+        contact.Name = contactCtrl.Name;
+        contact.Phone = contactCtrl.Phone;
+        contact.Email = contactCtrl.Email;
+        contact.Address = contactCtrl.Address;
+        ContactRepository.UpdateContact(contact.ContactId, contact);
+        Shell.Current.GoToAsync("..");
     }
-
+    
     private void btnCancel_Clicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("..");
+    }
+
+    private void contactCtrl_OnError(object sender, string e)
+    {
+        DisplayAlert("Error", e, "OK");
     }
 }

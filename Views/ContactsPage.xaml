@@ -3,18 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Maui_1_Application.Views.ContactsPage"
              Title="ContactsPage">
-    <ListView 
-        x:Name="listContacts" 
+
+    <Grid 
+        Padding="5"
+        RowDefinitions="50,*,50" 
+          ColumnDefinitions="*">
+        <SearchBar
+            x:Name="Search_Bar"
+            Grid.Row="0"
+            Grid.Column="0"
+            Placeholder="Search Contact"
+            TextChanged="SearchBar_TextChanges"
+            SearchButtonPressed="SearchBar_SearchButtonPressed"></SearchBar>
+        <ListView 
+            Grid.Row="1"
+            Grid.Column="0"
+        x:Name="listContacts"
         BackgroundColor="Transparent"
         SeparatorColor="Aqua"
         RowHeight="65"
         ItemSelected="listContacts_ItemSelected"
         ItemTapped="listContacts_ItemTapped">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <TextCell Text="{Binding Name}"
-                          Detail="{Binding Email}"></TextCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}"
+                      Detail="{Binding Email}">
+                        <TextCell.ContextActions>
+                            <MenuItem Text="Delete"
+                                      IsDestructive="True"
+                                      Clicked="MenuItem_ClickDelete"
+                                      CommandParameter="{Binding .}"></MenuItem>
+                        </TextCell.ContextActions>
+                    </TextCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button 
+            Grid.Row="2"
+            Grid.Column="0"
+            x:Name="btnAdd" 
+            Text="Add Contact" 
+            Clicked="btnAdd_Clicked"></Button>
+    </Grid>
+
 </ContentPage>
